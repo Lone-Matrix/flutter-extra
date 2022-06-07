@@ -1,16 +1,14 @@
 # extra
 
-A new Flutter project.
+Flutter project for study purpose. It contains Note taking feature and jokes from chuck api.
 
-## Getting Started
+## Used Dependencies
 
-This project is a starting point for a Flutter application.
+- shared_preferences: 2.0.15
+- url_strategy: 0.2.0
+- http: 0.13.4
+- provider: 6.0.3
+- url_launcher: 6.1.2
+- flutter_svg: 1.1.0
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The dependencies may change in the the future.
