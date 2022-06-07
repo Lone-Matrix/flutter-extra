@@ -22,7 +22,7 @@ jobs:
           java-version: '12.x'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10.4'
+          flutter-version: '3.0.1'
       
       - name: Decode android/upload-keystore.jks
         run: echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/app/upload-keystore.jks
