@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'Welcome $name!',
+                'Welcome, $name!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   wordSpacing: 3.5,
@@ -87,7 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
             delegate: SliverChildBuilderDelegate(
               (context, index) => ListTile(
                 title: Text(
-                  'Welcome to our App.. Enjoy your stay here and provide us some feedbacks to improve or implement in the upcomming updates.',
+                  '''Welcome to our App. This is in development phase and it contains the following feature(s):
+
+- Chuck Joke
+- About Page??
+
+Future update(s):
+-Notes
+
+Its builds are released in Github periodically. So, check for updates from About page.
+''',
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),

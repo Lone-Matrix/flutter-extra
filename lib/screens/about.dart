@@ -1,3 +1,4 @@
+import 'package:extra/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:extra/providers/config.dart';
@@ -40,7 +41,7 @@ class About extends StatelessWidget {
               const CircleAvatar(
                 radius: 65.0,
                 backgroundImage:
-                    NetworkImage('https://twitter.com/MrSneakyTurtle/photo/'),
+                    AssetImage('assets/images/twitter_profile.jpg'),
                 backgroundColor: Colors.transparent,
               ),
               const SizedBox(
@@ -77,11 +78,14 @@ class About extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
-                            final Uri url = Uri.parse('https://github.com/');
+                            final Uri url = Uri.parse(
+                                'https://github.com/Lone-Matrix/flutter-extra/releases/latest');
                             launchInWebView(url);
                           },
                           icon: SvgPicture.asset(
-                              'assets/images/github-brands.svg'),
+                              'assets/images/github-brands.svg',
+                              color:
+                                  MyTheme.isDark ? Colors.white : Colors.black),
                         )
                       ],
                     ),

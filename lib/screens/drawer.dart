@@ -21,7 +21,8 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
         topRight: Radius.circular(20.0),
       ),
     ),
-    // backgroundColor: Theme.of(context).canvasColor,
+    backgroundColor:
+        MyTheme.isDark ? Colors.grey[800] : Theme.of(context).canvasColor,
     context: context,
     isScrollControlled: true,
     //isDismissible: false,
@@ -193,6 +194,9 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                           topRight: Radius.circular(10.0),
                         ),
                       ),
+                      backgroundColor: MyTheme.isDark
+                          ? Colors.grey[800]
+                          : Theme.of(context).canvasColor,
                       isScrollControlled: true,
                       context: context,
                       builder: (context) => Padding(
@@ -223,6 +227,7 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                                 trailing: Switch(
                                   value: MyTheme.isDark,
                                   onChanged: (value) async {
+                                    Navigator.of(context).pop();
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
                                     currentTheme.switchTheme(prefs);
