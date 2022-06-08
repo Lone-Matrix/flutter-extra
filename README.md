@@ -1,4 +1,4 @@
-# extra
+# Extra
 
 Flutter project for study purpose. It contains Note taking feature and jokes from chuck api.
 
