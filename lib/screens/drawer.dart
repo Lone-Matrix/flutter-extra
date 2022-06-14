@@ -88,7 +88,7 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                       Navigator.of(context).pop();
                     }
                   : () {
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
                       Navigator.of(context)
                           .pushReplacementNamed(ChuckAPI.routeName);
                     },
@@ -136,7 +136,7 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                 style: Theme.of(context).textTheme.headline3,
               ),
               onTap: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
                 Navigator.of(context).pushReplacementNamed(MyNotes.routeName);
               },
             ),
