@@ -74,7 +74,7 @@ class _ChuckAPIState extends State<ChuckAPI> {
                   child: Text(snapshot.data!.value),
                 );
               } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
+                return const Text('Connection Error!');
               }
               return const CircularProgressIndicator();
             },

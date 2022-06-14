@@ -1,4 +1,5 @@
 import 'package:extra/apps/chuck/chuck.dart';
+import 'package:extra/screens/note.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -131,13 +132,12 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                 color: Colors.orange,
               ),
               title: Text(
-                'Todo',
+                'Notes',
                 style: Theme.of(context).textTheme.headline3,
               ),
               onTap: () {
                 Navigator.of(context).pop();
-                // Navigator.of(context)
-                //     .pushReplacementNamed(MyTodo.routeName);
+                Navigator.of(context).pushReplacementNamed(MyNotes.routeName);
               },
             ),
             // ListTile(
