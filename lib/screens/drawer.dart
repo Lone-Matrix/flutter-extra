@@ -387,7 +387,7 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                           Navigator.of(context).pop();
                         }
                       : () {
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
                           Navigator.of(context)
                               .pushReplacementNamed(About.routeName);
                         },

@@ -12,8 +12,8 @@ enum EditingMode {
 }
 
 class CustomArgument {
-  String id = '';
-  EditingMode eMode = EditingMode.adding;
+  String id;
+  EditingMode eMode;
 
   CustomArgument({required this.id, required this.eMode});
 }
@@ -43,7 +43,7 @@ class _MyNotesState extends State<MyNotes> {
             AddNotes.routeName,
             arguments: CustomArgument(
               eMode: EditingMode.adding,
-              id: DateTime.now().toString(), 
+              id: '',
             ),
           );
         },
@@ -132,19 +132,47 @@ class _MyNotesState extends State<MyNotes> {
                               ),
                               direction: DismissDirection.endToStart,
                               onDismissed: (direction) {
-                                Provider.of<Notes>(context, listen: false)
-                                    .deleteNote(
-                                  notes.items[index].id,
-                                );
-                                Notes().removedData();
-                                ScaffoldMessenger.of(context)
-                                    .hideCurrentSnackBar();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Note Deleted!!"),
-                                    duration: Duration(seconds: 2),
+                                showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text('Delete'),
+                                    content: const Text(
+                                        'Are you sure you want to delete this Note?'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, 'Cancel');
+                                          // setState(() {});
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, 'OK');
+                                          Provider.of<Notes>(context,
+                                                  listen: false)
+                                              .deleteNote(
+                                            notes.items[index].id,
+                                          );
+                                          Notes().removedData();
+                                          //setState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Note Deleted!!"),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Delete'),
+                                      ),
+                                    ],
                                   ),
                                 );
+                                setState(() {});
                               },
                               child: GestureDetector(
                                 onLongPress: () {

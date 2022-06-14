@@ -32,7 +32,9 @@ class _AddNotesState extends State<AddNotes> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      args = ModalRoute.of(context)?.settings.arguments as CustomArgument;
+      args = ModalRoute.of(context)!.settings.arguments as CustomArgument;
+    }
+    if (args.eMode == EditingMode.editing) {
       selectedNote =
           Provider.of<Notes>(context, listen: false).findById(args.id);
     }

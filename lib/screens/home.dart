@@ -1,3 +1,4 @@
+import 'package:extra/apps/notes/helper/note_db.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -64,25 +65,31 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // if (DBHelper.totalData > 0)
-          //   SliverToBoxAdapter(
-          //     child: Padding(
-          //       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
-          //       child: Text(
-          //         DBHelper.totalData == 1
-          //             ? 'You currently have ${DBHelper.totalData} Note.'
-          //             : 'You currently have ${DBHelper.totalData} Notes.',
-          //         textAlign: TextAlign.center,
-          //         style: TextStyle(
-          //           wordSpacing: 3.5,
-          //           fontSize: 24,
-          //           fontWeight: FontWeight.w600,
-          //           fontFamily: 'SourceSansPro',
-          //           color: Colors.blue[700],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
+          if (DBHelper.totalData > 0)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+                child: Text(
+                  DBHelper.totalData == 1
+                      ? 'You currently have ${DBHelper.totalData} Note.'
+                      : 'You currently have ${DBHelper.totalData} Notes.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    wordSpacing: 3.5,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'SourceSansPro',
+                    color: Colors.blue[700],
+                  ),
+                ),
+              ),
+            ),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 12,
+            ),
+          ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => ListTile(
@@ -90,10 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   '''Welcome to our App. This is in development phase and it contains the following feature(s):
 
 - Chuck Joke
-- About Page??
+- Notes
 
 Future update(s):
--Notes
+-More ideas to come
 
 Its builds are released in Github periodically. So, check for updates from About page.
 ''',

@@ -1,6 +1,6 @@
 # Extra
 
-Flutter project for study purpose. It contains Note taking feature and jokes from chuck api.
+This Flutter project is for study purpose. It contains Note taking feature and jokes from chuck api. This app is WIP.
 
 ## Used Dependencies
 
@@ -10,5 +10,7 @@ Flutter project for study purpose. It contains Note taking feature and jokes fro
 - provider: 6.0.3
 - url_launcher: 6.1.2
 - flutter_svg: 1.1.0
+- sqflite: ^2.0.2+1
+- path: ^1.8.1
 
 The dependencies may change in the the future.
