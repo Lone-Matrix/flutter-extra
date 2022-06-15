@@ -49,10 +49,7 @@ jobs:
 
       # Test and Build Apk
       - name: Test and Build Apk
-        run: |
-        flutter pub get
-        flutter test
-        flutter build apk --split-per-abi --build-number=${GITHUB_RUN_NUMBER}
+        run: flutter pub get && flutter test && flutter build apk --split-per-abi --build-number=${GITHUB_RUN_NUMBER}
 
       # Get App Info
       - name: Get Apk Info
@@ -125,4 +122,3 @@ jobs:
             
             See previous releases: https://github.com/${{ github.repository }}/releases
           document: build/app/outputs/flutter-apk/*.apk
-          
