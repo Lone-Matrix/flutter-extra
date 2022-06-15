@@ -93,7 +93,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.APK_VERSION }}-${{ github.run_number }}
-          name: ChuckAPI v${{ env.APK_VERSION }}-${{ github.run_number }}
+          name: Extra v${{ env.APK_VERSION }}-${{ github.run_number }}
           body: |
             ---
             ### Checksums
@@ -119,13 +119,17 @@ jobs:
           format: markdown
           disable_web_page_preview: true
           message: |
+            Extra v${{ env.APK_VERSION }}-${{ github.run_number }}
+            ---------------
             ${{ github.actor }} created commit:
             Commit message: ${{ github.event.commits[0].message }}
             
             Repository: ${{ github.repository }}
             
-            See changes: https://github.com/${{ github.repository }}/releases
+            See previous releases: https://github.com/${{ github.repository }}/releases
           document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+          document: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+          document: build/app/outputs/flutter-apk/app-x86_64-release.apk
 
       # - name: Sign APK
       #   uses: r0adkll/sign-android-release@v1
