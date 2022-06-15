@@ -20,11 +20,22 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
+      
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.2'
       
-      - name: Decode android/upload-keystore.jks
+      - name: Decode android/app/upload-keystore.jks
         run: echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/app/upload-keystore.jks
 
       - name: Decode android/key.properties
@@ -108,13 +119,13 @@ jobs:
           format: markdown
           disable_web_page_preview: true
           message: |
-            New commit pushed to [${{ github.event.repository.name }}](${{ github.event.repository.html_url }}) by [${{ github.event.head_commit.author.name }}](${{ github.event.head_commit.author.html_url }}).
-            --------
-            Commit message: ${{ github.event.head_commit.message }}
-          document: |
-            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            build/app/outputs/flutter-apk/app-x86_64-release.apk
+            ${{ github.actor }} created commit:
+            Commit message: ${{ github.event.commits[0].message }}
+            
+            Repository: ${{ github.repository }}
+            
+            See changes: https://github.com/${{ github.repository }}/releases
+          document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
 
       # - name: Sign APK
       #   uses: r0adkll/sign-android-release@v1
