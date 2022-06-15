@@ -17,10 +17,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+
+      # Setup Java environment
+      - name: Setting Java environment
+        uses: actions/setup-java@v1
         with:
           java-version: '12.x'
       
+      # Gradle cache
       - name: Gradle cache
         uses: actions/cache@v2
         with:
@@ -31,30 +35,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - uses: subosito/flutter-action@v2
+      # Setup Flutter environment
+      - name: Setting Flutter Environment
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.2'
       
-      - name: Decode android/app/upload-keystore.jks
-        run: echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/app/upload-keystore.jks
+      # Decode keystore and its properties
+      - name: Decodie keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/app/upload-keystore.jks
+          echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
 
-      - name: Decode android/key.properties
-        run: echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
+      # Test and Build Apk
+      - name: Test and Build Apk
+        run: |
+        flutter pub get
+        flutter test
+        flutter build apk --split-per-abi --build-number=${GITHUB_RUN_NUMBER}
 
-      - run: flutter pub get
-      - run: flutter test
-      - name: Build Apk
-        run: flutter build apk --split-per-abi --build-number=${GITHUB_RUN_NUMBER}
-
-      # - name: Sign APK
-      #   uses: r0adkll/sign-android-release@v1
-      #   with:
-      #     releaseDirectory: build/app/outputs/flutter-apk
-      #     signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-      #     alias: ${{ secrets.ALIAS }}
-      #     keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-      #     keyPassword: ${{ secrets.KEY_PASSWORD }}
-
+      # Get App Info
       - name: Get Apk Info
         id: apk-info
         uses: hkusu/apk-info-action@v1
@@ -64,6 +64,7 @@ jobs:
       - name: Show Apk Info
         run: echo "APK_VERSION=${{ steps.apk-info.outputs.version-name }}" >> $GITHUB_ENV
 
+      # Get checksums and renaiming outputs
       - name: Get SHA-256 Checksums
         run: |
           set -e
@@ -83,13 +84,7 @@ jobs:
           sha=`sha256sum app-x86_64-release.apk | awk '{ print $1 }'`
           echo "APK_X86_SHA=$sha" >> $GITHUB_ENV
 
-      # - name: Get apk path
-      #   id: apk-path
-      #   run: |
-      #     path=$(find **/build/outputs/apk -name '*.apk' -type f | head -1)
-      #     echo "::set-output name=path::$path"
-
-
+      # Create Github Release
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
@@ -107,13 +102,13 @@ jobs:
             build/app/outputs/flutter-apk/extra-v${{ env.APK_VERSION }}-${{ github.run_number }}-arm64-v8a.apk
             build/app/outputs/flutter-apk/extra-v${{ env.APK_VERSION }}-${{ github.run_number }}-armeabi-v7a.apk
             build/app/outputs/flutter-apk/extra-v${{ env.APK_VERSION }}-${{ github.run_number }}-x86_64.apk
-            
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
-      - name: Commit on Telegram
+      # Notification on Telegram
+      - name: Alert on Telegram
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -130,22 +125,4 @@ jobs:
             
             See previous releases: https://github.com/${{ github.repository }}/releases
           document: build/app/outputs/flutter-apk/*.apk
-
-      # - name: Sign APK
-      #   uses: r0adkll/sign-android-release@v1
-      #   with:
-      #     releaseDirectory: build/app/outputs/apk/release
-      #     signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-      #     alias: ${{ secrets.ALIAS }}
-      #     keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-      #     keyPassword: ${{ secrets.KEY_PASSWORD }}
-
-      # - uses: ncipollo/release-action@v1
-      #   with:
-      #     artifacts: "build/app/outputs/apk/release/*"
-      #     tag: v1.0.${{ github.run_number }}
-      #     token: ${{ secrets.TOKEN }}
-
-      # build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-      #       build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-      #       build/app/outputs/flutter-apk/app-x86_64-release.apk
+          
