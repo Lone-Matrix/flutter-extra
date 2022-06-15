@@ -109,7 +109,12 @@ jobs:
           disable_web_page_preview: true
           message: |
             New commit pushed to [${{ github.event.repository.name }}](${{ github.event.repository.html_url }}) by [${{ github.event.head_commit.author.name }}](${{ github.event.head_commit.author.html_url }}).
+            --------
             Commit message: ${{ github.event.head_commit.message }}
+          document: |
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
 
       # - name: Sign APK
       #   uses: r0adkll/sign-android-release@v1
