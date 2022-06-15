@@ -127,9 +127,7 @@ jobs:
             Repository: ${{ github.repository }}
             
             See previous releases: https://github.com/${{ github.repository }}/releases
-          document: build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-          document: build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-          document: build/app/outputs/flutter-apk/app-x86_64-release.apk
+          document: build/app/outputs/flutter-apk/*.apk
 
       # - name: Sign APK
       #   uses: r0adkll/sign-android-release@v1
