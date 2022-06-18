@@ -42,7 +42,7 @@ jobs:
           flutter-version: '3.0.2'
       
       # Decode keystore and its properties
-      - name: Decodie keystore
+      - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_JKS_PROD }}" | base64 --decode > android/app/upload-keystore.jks
           echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
