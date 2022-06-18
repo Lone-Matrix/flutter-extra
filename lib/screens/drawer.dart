@@ -261,6 +261,9 @@ Future myDrawer(BuildContext context, Color color, DrawerItems dItem) {
                                         topRight: Radius.circular(10.0),
                                       ),
                                     ),
+backgroundColor: MyTheme.isDark
+                          ? Colors.grey[800]
+                          : Theme.of(context).canvasColor,
                                     context: context,
                                     builder: (context) => Padding(
                                       padding: EdgeInsets.only(
