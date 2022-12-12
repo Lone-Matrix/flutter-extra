@@ -39,7 +39,7 @@ jobs:
       - name: Setting Flutter Environment
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.0.2'
+          flutter-version: '3.3.9'
       
       # Decode keystore and its properties
       - name: Decode keystore

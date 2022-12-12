@@ -4,6 +4,7 @@ import 'package:extra/animations/route_animation.dart';
 ThemeData darkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
+    useMaterial3: true,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CustomPageTransitionBuilder(),
@@ -64,6 +65,8 @@ ThemeData darkTheme() {
 
 ThemeData lightTheme() {
   return ThemeData(
+    brightness: Brightness.light,
+    useMaterial3: true,
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
         TargetPlatform.android: CustomPageTransitionBuilder(),

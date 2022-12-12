@@ -39,13 +39,13 @@ class About extends StatelessWidget {
           child: Column(
             children: [
               const CircleAvatar(
-                radius: 65.0,
                 backgroundImage:
                     AssetImage('assets/images/twitter_profile.jpg'),
                 backgroundColor: Colors.transparent,
+                radius: 62.0,
               ),
               const SizedBox(
-                height: 12.0,
+                height: 10.0,
               ),
               Text(
                 'MrSneakyTurtle',
@@ -61,7 +61,7 @@ class About extends StatelessWidget {
                     const Text(
                         "This app is still in development. Check github for updates. Some under the hood improvements are frequently done."),
                     const SizedBox(
-                      height: 26.0,
+                      height: 20.0,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,8 +73,11 @@ class About extends StatelessWidget {
                             launchInWebView(url);
                           },
                           icon: SvgPicture.asset(
-                              'assets/images/twitter-brands.svg',
-                              color: Colors.blue),
+                            'assets/images/twitter-brands.svg',
+                            color: Colors.blue,
+                            height: 50,
+                            width: 50,
+                          ),
                         ),
                         IconButton(
                           onPressed: () {
@@ -83,9 +86,11 @@ class About extends StatelessWidget {
                             launchInWebView(url);
                           },
                           icon: SvgPicture.asset(
-                              'assets/images/github-brands.svg',
-                              color:
-                                  MyTheme.isDark ? Colors.white : Colors.black),
+                            'assets/images/github-brands.svg',
+                            color: MyTheme.isDark ? Colors.white : Colors.black,
+                            height: 50,
+                            width: 50,
+                          ),
                         )
                       ],
                     ),
