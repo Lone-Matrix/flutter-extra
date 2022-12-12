@@ -10,7 +10,6 @@ import 'package:url_strategy/url_strategy.dart';
 import 'package:extra/apps/chuck/chuck.dart';
 import 'package:extra/providers/config.dart';
 import 'package:extra/providers/name.dart';
-import 'package:extra/screens/about.dart';
 import 'package:extra/screens/home.dart';
 import 'package:extra/theme/app_theme.dart';
 import 'package:extra/theme/theme.dart';
@@ -72,7 +71,6 @@ class _MyAppState extends State<MyApp> {
         routes: {
           WelcomePage.routeName: (context) => const WelcomePage(),
           MyHomePage.routeName: (context) => const MyHomePage(),
-          About.routeName: (context) => const About(),
           ChuckAPI.routeName: (context) => const ChuckAPI(),
           MyNotes.routeName: (context) => const MyNotes(),
           AddNotes.routeName: (context) => const AddNotes(),

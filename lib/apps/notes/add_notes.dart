@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,82 +56,93 @@ class _AddNotesState extends State<AddNotes> {
       _titleController.text = selectedNote.title.trim();
       _textController.text = selectedNote.text.trim();
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: args.eMode == EditingMode.adding
-            ? const Text('Add a Note')
-            : const Text('Edit'),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.save,
-              color: Theme.of(context).cardColor,
+    return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 2,
+          backgroundColor: MyTheme.isDark
+              ? darkDynamic?.background
+              : lightDynamic?.background ?? Colors.teal,
+          title: args.eMode == EditingMode.adding
+              ? const Text('Add a Note')
+              : const Text('Edit'),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.save,
+              ),
+              onPressed: () {
+                if (_titleController.text.isEmpty ||
+                    _textController.text.isEmpty) {
+                  return;
+                }
+                if (args.eMode == EditingMode.adding) {
+                  Provider.of<Notes>(context, listen: false).addNote(
+                    _titleController.text.trim(),
+                    _textController.text.trim(),
+                  );
+                }
+                if (args.eMode == EditingMode.editing) {
+                  Provider.of<Notes>(context, listen: false).updateNote(
+                    _titleController.text.trim(),
+                    _textController.text.trim(),
+                    args.id,
+                  );
+                }
+                if (args.eMode == EditingMode.adding) {
+                  Notes().addedData();
+                }
+                Navigator.of(context).pop();
+              },
             ),
-            onPressed: () {
-              if (_titleController.text.isEmpty ||
-                  _textController.text.isEmpty) {
-                return;
-              }
-              if (args.eMode == EditingMode.adding) {
-                Provider.of<Notes>(context, listen: false).addNote(
-                  _titleController.text.trim(),
-                  _textController.text.trim(),
-                );
-              }
-              if (args.eMode == EditingMode.editing) {
-                Provider.of<Notes>(context, listen: false).updateNote(
-                  _titleController.text.trim(),
-                  _textController.text.trim(),
-                  args.id,
-                );
-              }
-              if (args.eMode == EditingMode.adding) {
-                Notes().addedData();
-              }
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextField(
-                controller: _titleController,
-                style: TextStyle(
-                  fontSize: 25,
-                  color: MyTheme.isDark == false ? Colors.black : Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Chilanka',
+          ],
+        ),
+        body: Container(
+          color: MyTheme.isDark
+              ? Theme.of(context).canvasColor
+              : lightDynamic?.background ?? Theme.of(context).canvasColor,
+          padding: const EdgeInsets.all(16.0),
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                TextField(
+                  controller: _titleController,
+                  style: TextStyle(
+                    fontSize: 25,
+                    color:
+                        MyTheme.isDark == false ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Chilanka',
+                  ),
+                  decoration: const InputDecoration(
+                    hintText: 'Title',
+                    border: InputBorder.none,
+                    counter: SizedBox(),
+                  ),
+                  maxLines: null,
+                  maxLength: 1024,
+                  textCapitalization: TextCapitalization.sentences,
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Title',
-                  border: InputBorder.none,
-                  counter: SizedBox(),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _textController,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color:
+                        MyTheme.isDark == false ? Colors.black : Colors.white,
+                  ),
+                  decoration: const InputDecoration.collapsed(hintText: 'Note'),
+                  maxLines: null,
+                  textCapitalization: TextCapitalization.sentences,
                 ),
-                maxLines: null,
-                maxLength: 1024,
-                textCapitalization: TextCapitalization.sentences,
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _textController,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: MyTheme.isDark == false ? Colors.black : Colors.white,
-                ),
-                decoration: const InputDecoration.collapsed(hintText: 'Note'),
-                maxLines: null,
-                textCapitalization: TextCapitalization.sentences,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -1,3 +1,5 @@
+import 'package:dynamic_color/dynamic_color.dart';
+import 'package:extra/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,210 +34,226 @@ class _MyNotesState extends State<MyNotes> {
   bool expanded = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldkey,
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 5.0,
-        icon: const Icon(Icons.add),
-        label: const Text('Add a Note'),
-        onPressed: () {
-          Navigator.of(context).pushNamed(
-            AddNotes.routeName,
-            arguments: CustomArgument(
-              eMode: EditingMode.adding,
-              id: '',
-            ),
-          );
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).primaryColor,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white,
+    return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+      return Scaffold(
+        key: _scaffoldkey,
+        floatingActionButton: FloatingActionButton.extended(
+          elevation: 5.0,
+          icon: const Icon(Icons.add),
+          label: const Text('Add a Note'),
+          backgroundColor: MyTheme.isDark
+              ? darkDynamic?.primary
+              : lightDynamic?.primary ?? Theme.of(context).canvasColor,
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              AddNotes.routeName,
+              arguments: CustomArgument(
+                eMode: EditingMode.adding,
+                id: '',
               ),
-              onPressed: () {
-                myDrawer(
-                  context,
-                  Colors.blue,
-                  DrawerItems.notes,
-                );
-              },
-            ),
-          ],
+            );
+          },
         ),
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'My Notes',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'SourceSansPro',
-                color: Colors.blue,
-                fontSize: 20.0,
-                letterSpacing: 2.5,
-                fontWeight: FontWeight.bold,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomAppBar(
+          elevation: 2,
+          color: MyTheme.isDark
+              ? const Color.fromARGB(255, 121, 136, 143)
+              : Colors.orange,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  myDrawer(
+                    context,
+                    Colors.blue,
+                    DrawerItems.notes,
+                  );
+                },
               ),
-            ),
-            SizedBox(
-              height: 20.0,
-              width: 150.0,
-              child: Divider(
-                color: Colors.pink[300],
+            ],
+          ),
+        ),
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'My Notes',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'SourceSansPro',
+                  color: Colors.blue,
+                  fontSize: 20.0,
+                  letterSpacing: 2.5,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Expanded(
-              child: FutureBuilder(
-                future: Provider.of<Notes>(context, listen: false)
-                    .fetchAndSetNotes(),
-                builder: (ctx, snapshot) => snapshot.connectionState ==
-                        ConnectionState.waiting
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Consumer<Notes>(
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(32.0),
-                            child: Text('Not Notes found, start adding some!!'),
-                          ),
-                        ),
-                        builder: (ctx, notes, child) => ListView.builder(
-                          itemCount: notes.items.length,
-                          itemBuilder: (ctx, index) => Padding(
-                            padding: const EdgeInsets.only(
-                              right: 10.0,
-                              left: 8.0,
-                              top: 8.0,
-                              bottom: 3.0,
+              SizedBox(
+                height: 20.0,
+                width: 150.0,
+                child: Divider(
+                  color: Colors.pink[300],
+                ),
+              ),
+              Expanded(
+                child: FutureBuilder(
+                  future: Provider.of<Notes>(context, listen: false)
+                      .fetchAndSetNotes(),
+                  builder: (ctx, snapshot) => snapshot.connectionState ==
+                          ConnectionState.waiting
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : Consumer<Notes>(
+                          child: const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(32.0),
+                              child:
+                                  Text('Not Notes found, start adding some!!'),
                             ),
-                            child: Dismissible(
-                              key: ValueKey(notes.items[index].id),
-                              background: Container(
-                                color: Theme.of(context).errorColor,
-                                alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.only(right: 20),
-                                child: const Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
+                          ),
+                          builder: (ctx, notes, child) => ListView.builder(
+                            itemCount: notes.items.length,
+                            itemBuilder: (ctx, index) => Padding(
+                              padding: const EdgeInsets.only(
+                                right: 10.0,
+                                left: 8.0,
+                                top: 8.0,
+                                bottom: 3.0,
                               ),
-                              direction: DismissDirection.endToStart,
-                              onDismissed: (direction) {
-                                showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    title: const Text('Delete'),
-                                    content: const Text(
-                                        'Are you sure you want to delete this Note?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context, 'Cancel');
-                                          // setState(() {});
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context, 'OK');
-                                          Provider.of<Notes>(context,
-                                                  listen: false)
-                                              .deleteNote(
-                                            notes.items[index].id,
-                                          );
-                                          Notes().removedData();
-                                          //setState(() {});
-                                          ScaffoldMessenger.of(context)
-                                              .hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text("Note Deleted!!"),
-                                              duration: Duration(seconds: 2),
-                                            ),
-                                          );
-                                        },
-                                        child: const Text('Delete'),
-                                      ),
-                                    ],
+                              child: Dismissible(
+                                key: ValueKey(notes.items[index].id),
+                                background: Container(
+                                  color: Theme.of(context).errorColor,
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 40,
                                   ),
-                                );
-                                setState(() {});
-                              },
-                              child: GestureDetector(
-                                onLongPress: () {
-                                  setState(() {
-                                    expanded = !expanded;
-                                  });
-                                  if (expanded) {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:
-                                            Text("All Notes are Expanded!!"),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                            "Notes are resized to normal!!"),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
+                                ),
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (direction) {
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      backgroundColor: MyTheme.isDark
+                                          ? darkDynamic?.background
+                                          : lightDynamic?.background ??
+                                              Theme.of(context).canvasColor,
+                                      title: const Text('Delete'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this Note?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 'Cancel');
+                                            // setState(() {});
+                                          },
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 'OK');
+                                            Provider.of<Notes>(context,
+                                                    listen: false)
+                                                .deleteNote(
+                                              notes.items[index].id,
+                                            );
+                                            Notes().removedData();
+                                            //setState(() {});
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text("Note Deleted!!"),
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                          },
+                                          child: const Text('Delete'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  setState(() {});
                                 },
-                                child: ListTile(
-                                  title: Text(
-                                    notes.items[index].title,
-                                    style:
-                                        Theme.of(context).textTheme.headline1,
-                                  ),
-                                  subtitle: Text(
-                                    notes.items[index].text,
-                                    maxLines: expanded
-                                        ? notes.items[index].text.length
-                                        : maxLines,
-                                    style:
-                                        Theme.of(context).textTheme.headline2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed(
-                                      AddNotes.routeName,
-                                      arguments: CustomArgument(
-                                        eMode: EditingMode.editing,
-                                        id: notes.items[index].id,
-                                      ),
-                                    );
+                                child: GestureDetector(
+                                  onLongPress: () {
+                                    setState(() {
+                                      expanded = !expanded;
+                                    });
+                                    if (expanded) {
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text("All Notes are Expanded!!"),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              "Notes are resized to normal!!"),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
                                   },
+                                  child: ListTile(
+                                    title: Text(
+                                      notes.items[index].title,
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
+                                    subtitle: Text(
+                                      notes.items[index].text,
+                                      maxLines: expanded
+                                          ? notes.items[index].text.length
+                                          : maxLines,
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                        AddNotes.routeName,
+                                        arguments: CustomArgument(
+                                          eMode: EditingMode.editing,
+                                          id: notes.items[index].id,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

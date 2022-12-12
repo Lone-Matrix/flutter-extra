@@ -89,6 +89,8 @@ jobs:
           name: Extra v${{ env.APK_VERSION }}-${{ github.run_number }}
           body: |
             ---
+            ### Changelogs
+            ${{ github.event.commits[0].message }}
             ### Checksums
             | Variant | SHA-256 |
             | ------- | ------- |

@@ -1,4 +1,6 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:extra/apps/notes/helper/note_db.dart';
+import 'package:extra/theme/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -21,80 +23,85 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     name = Provider.of<MyName>(context).userName;
-    return Scaffold(
-      drawer: null,
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            title: const Text('Home'),
-            floating: true,
-            // actions: [
-            //   IconButton(
-            //     onPressed: () async {
-            //       SharedPreferences prefs =
-            //           await SharedPreferences.getInstance();
-            //       currentTheme.switchTheme(prefs);
-            //     },
-            //     icon: const Icon(Icons.dark_mode),
-            //   ),
-            // ],
-            //pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              //title: const Text('data'),
-              centerTitle: true,
-              background: Image.asset(
-                'assets/images/monkey.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            expandedHeight: 200,
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Welcome, $name!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  wordSpacing: 3.5,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'SourceSansPro',
-                  color: Colors.blueAccent[700],
+    return DynamicColorBuilder(
+        builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+      return Scaffold(
+        backgroundColor: MyTheme.isDark
+            ? Theme.of(context).canvasColor
+            : lightDynamic?.background ?? Theme.of(context).canvasColor,
+        drawer: null,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              title: const Text('Home'),
+              floating: true,
+              // actions: [
+              //   IconButton(
+              //     onPressed: () async {
+              //       SharedPreferences prefs =
+              //           await SharedPreferences.getInstance();
+              //       currentTheme.switchTheme(prefs);
+              //     },
+              //     icon: const Icon(Icons.dark_mode),
+              //   ),
+              // ],
+              //pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                //title: const Text('data'),
+                centerTitle: true,
+                background: Image.asset(
+                  'assets/images/monkey.jpg',
+                  fit: BoxFit.cover,
                 ),
               ),
+              expandedHeight: 200,
             ),
-          ),
-          if (DBHelper.totalData > 0)
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  DBHelper.totalData == 1
-                      ? 'You currently have ${DBHelper.totalData} Note.'
-                      : 'You currently have ${DBHelper.totalData} Notes.',
+                  'Welcome, $name!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     wordSpacing: 3.5,
-                    fontSize: 24,
+                    fontSize: 32,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'SourceSansPro',
-                    color: Colors.blue[700],
+                    color: Colors.blueAccent[700],
                   ),
                 ),
               ),
             ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 12,
+            if (DBHelper.totalData > 0)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 6.0, horizontal: 16.0),
+                  child: Text(
+                    DBHelper.totalData == 1
+                        ? 'You currently have ${DBHelper.totalData} Note.'
+                        : 'You currently have ${DBHelper.totalData} Notes.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      wordSpacing: 3.5,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'SourceSansPro',
+                      color: Colors.blue[700],
+                    ),
+                  ),
+                ),
+              ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 12,
+              ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => ListTile(
-                title: Text(
-                  '''Welcome to our App. This is in development phase and it contains the following feature(s):
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => ListTile(
+                  title: Text(
+                    '''Welcome to our App. This is in development phase and it contains the following feature(s):
 
 - Chuck Joke
 - Notes
@@ -104,36 +111,39 @@ Future update(s):
 
 Its builds are released in Github periodically. So, check for updates from About page.
 ''',
-                  style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
                 ),
+                childCount: 1,
               ),
-              childCount: 1,
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Theme.of(context).bottomAppBarColor,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                myDrawer(
-                  context,
-                  Colors.teal,
-                  DrawerItems.home,
-                );
-              },
             ),
           ],
         ),
-      ),
-    );
+        bottomNavigationBar: BottomAppBar(
+          color: MyTheme.isDark
+              ? const Color.fromARGB(255, 121, 136, 143)
+              : Colors.teal,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  myDrawer(
+                    context,
+                    Colors.teal,
+                    DrawerItems.home,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }
